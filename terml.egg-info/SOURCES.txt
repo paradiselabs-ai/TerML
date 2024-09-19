@@ -1,0 +1,17 @@
+LICENSE
+MANIFEST.in
+README.md
+requirements.txt
+setup.py
+terml/__init__.py
+terml/ai_integration.py
+terml/commands.py
+terml/config.py
+terml/main.py
+terml/terminal_handler.py
+terml.egg-info/PKG-INFO
+terml.egg-info/SOURCES.txt
+terml.egg-info/dependency_links.txt
+terml.egg-info/entry_points.txt
+terml.egg-info/requires.txt
+terml.egg-info/top_level.txt
