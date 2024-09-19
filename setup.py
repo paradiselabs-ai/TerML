@@ -5,13 +5,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="terml",
-    version="0.2.0",
+    version="0.3.0",
     author="Paradise Labs",
     author_email="developers@paradiselabs.co",
     description="TerML - AI-powered Terminal Assistant",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pryh4ck/terml",
+    url="https://github.com/paradiselabs-ai/TerML",
     packages=find_packages(),
     install_requires=[
         "anthropic==0.7.2",
