@@ -15,5 +15,6 @@
 - $ terml explain  
 - $ terml suggest  
 - $ terml debug  
+- $ terml chat -q  
 
 ## AI Assistance
