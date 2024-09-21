@@ -12,5 +12,6 @@
 - AI integration - TerML is made to be installed into your global PATH for terminal usage, to be able to continue to help you after creating different virtual environmemnts, however you can choose to only install it in a single venv.  
 
 ## Commands
+- $ terml explain  
 
 ## AI Assistance
