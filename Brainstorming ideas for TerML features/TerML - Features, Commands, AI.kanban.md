@@ -22,5 +22,9 @@
 - $ terml analyze [/path/to/project]  
 - $ terml test [path/to/project]  
 - $ terml deps [subcommand] [args]  
+  $ terml deps list - list of current dependencies and their versions]
+  $ terml deps update - updates all dependences to their latest versions
+  $ terml deps add [name of dependency] - installs a dependency library to the project
+  $ terml deps remove [name of dependency] - removes a depencendy library from the project 
 
 ## AI Assistance
