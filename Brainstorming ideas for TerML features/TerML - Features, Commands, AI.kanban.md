@@ -18,5 +18,6 @@
 - $ terml chat -q  
 - $ terml auto —with-user  
 - $ terml summarize [path]  
+- $ terml generate [project_type] [project_name]  
 
 ## AI Assistance
