@@ -20,5 +20,6 @@
 - $ terml summarize [path]  
 - $ terml generate [project_type] [project_name]  
 - $ terml analyze /path/to/project  
+- $ terml test [path/to/project]  
 
 ## AI Assistance
