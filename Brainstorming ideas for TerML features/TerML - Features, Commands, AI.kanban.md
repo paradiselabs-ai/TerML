@@ -14,5 +14,6 @@
 ## Commands
 - $ terml explain  
 - $ terml suggest  
+- $ terml debug  
 
 ## AI Assistance
