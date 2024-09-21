@@ -17,5 +17,6 @@
 - $ terml debug  
 - $ terml chat -q  
 - $ terml auto —with-user  
+- $ terml summarize [path/to/file/or/directory]  
 
 ## AI Assistance
