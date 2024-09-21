@@ -30,3 +30,4 @@
 ## AI Assistance
 - Currently created to natively use Anthropic Claude 3.5 Sonnet (current version) via API key.  
 - Would like to expand AI options, openrouter, huggingface, mistral, etc.  
+- Possible submission for the OpenAI strawberry o1 model hackathon  
