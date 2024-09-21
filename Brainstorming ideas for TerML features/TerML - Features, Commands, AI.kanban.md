@@ -27,7 +27,7 @@
   $ terml deps add [name of dependency] - installs a dependency library to the project
   $ terml deps remove [name of dependency] - removes a depencendy library from the project 
 
-## AI Assistance
+## AI Assistance Roadmap
 - Currently created to natively use Anthropic Claude 3.5 Sonnet (current version) via API key.  
 - Would like to expand AI options, openrouter, huggingface, mistral, etc.  
 - Possible submission for the OpenAI strawberry o1 model hackathon  
