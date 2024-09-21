@@ -7,6 +7,7 @@
 - Summarize - Get a summary of the contents of a file or directory, or files in a directory, etc.  
 - Generate - Create new project structures with predefined templates  
 - Analyze - Perform code analysis and receive AI- Powered improvement suggestions.  
+- Test - Generate unit tests for your project  
 
 ## Commands
 
