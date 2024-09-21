@@ -8,7 +8,7 @@
 - Generate - Create new project structures with predefined templates  
 - Analyze - Perform code analysis and receive AI- Powered improvement suggestions.  
 - Test - Generate unit tests for your project  
-- Deps - Manage your project dependencies  
+- Deps - Let AI manage your project dependencies  
 
 ## Commands
 
