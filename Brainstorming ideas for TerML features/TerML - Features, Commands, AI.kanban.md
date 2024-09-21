@@ -32,3 +32,4 @@
 - Would like to expand AI options, openrouter, huggingface, mistral, etc.  
 - Possible submission for the OpenAI strawberry o1 model hackathon  
 - Allow for Autonomous Multi-Agent collaboration for pAIr programming. Let agents use tools, call functions, etc.  
+- Configure a terml -pe, —PromtEngineer [inference endpoint] - to configure a specific environment to prompt engineer and train the AI Model you want to use for terml, before using it.  
