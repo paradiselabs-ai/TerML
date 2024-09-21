@@ -28,3 +28,4 @@
   $ terml deps remove [name of dependency] - removes a depencendy library from the project 
 
 ## AI Assistance
+- Currently created to natively use Anthropic Claude 3.5 Sonnet (current version) via API key.  
