@@ -17,6 +17,6 @@
 - $ terml debug  
 - $ terml chat -q  
 - $ terml auto —with-user  
-- $ terml summarize [path]]  
+- $ terml summarize [path]  
 
 ## AI Assistance
