@@ -16,5 +16,6 @@
 - $ terml suggest  
 - $ terml debug  
 - $ terml chat -q  
+- $ terml auto —with-user  
 
 ## AI Assistance
