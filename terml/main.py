@@ -11,7 +11,7 @@ def cli(ctx):
     if ctx.invoked_subcommand is None:
         click.echo("TerML: AI-powered Terminal Assistant")
         click.echo("Use 'terml [command]' to interact with TerML.")
-        click.echo("Available commands: explain, suggest, debug, chat, auto, summarize")
+        click.echo("Available commands: explain, suggest, debug, chat, auto, summarize, generate, analyze, test, deps")
         click.echo("For more information, use 'terml [command] --help'")
 
 @cli.command()
@@ -58,6 +58,36 @@ def summarize(path):
     """Summarize the contents of a file or directory"""
     executor = CommandExecutor(TerminalHandler(), AIIntegration())
     executor.execute(f"terml summarize {path}")
+
+@cli.command()
+@click.argument('project_type')
+@click.argument('project_name')
+def generate(project_type, project_name):
+    """Generate a new project structure"""
+    executor = CommandExecutor(TerminalHandler(), AIIntegration())
+    executor.execute(f"terml generate {project_type} {project_name}")
+
+@cli.command()
+@click.argument('path', type=click.Path(exists=True))
+def analyze(path):
+    """Analyze code in the specified path"""
+    executor = CommandExecutor(TerminalHandler(), AIIntegration())
+    executor.execute(f"terml analyze {path}")
+
+@cli.command()
+@click.argument('path', type=click.Path(exists=True))
+def test(path):
+    """Generate tests for the project in the specified path"""
+    executor = CommandExecutor(TerminalHandler(), AIIntegration())
+    executor.execute(f"terml test {path}")
+
+@cli.command()
+@click.argument('subcommand', type=click.Choice(['list', 'update', 'add', 'remove']))
+@click.argument('args', nargs=-1)
+def deps(subcommand, args):
+    """Manage project dependencies"""
+    executor = CommandExecutor(TerminalHandler(), AIIntegration())
+    executor.execute(f"terml deps {subcommand} {' '.join(args)}")
 
 if __name__ == "__main__":
     cli()

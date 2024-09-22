@@ -1,19 +1,24 @@
 Metadata-Version: 2.1
 Name: terml
-Version: 0.2.0
+Version: 0.4.0
 Summary: TerML - AI-powered Terminal Assistant
-Home-page: https://github.com/pryh4ck/terml
-Author: Paradise Labs
-Author-email: developers@paradiselabs.co
+Author-email: Paradise Labs <developers@paradiselabs.co>
+Project-URL: Homepage, https://github.com/paradiselabs-ai/TerML
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Utilities
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: anthropic==0.7.2
+Requires-Dist: anthropic==0.7.4
 Requires-Dist: click==8.1.3
 Requires-Dist: python-dotenv==1.0.0
+Requires-Dist: pytest==7.3.1
+Requires-Dist: httpx<0.28.0,>=0.23.0
+Requires-Dist: httpcore<1.1.0,>=0.15.0
 
 # TerML - AI-powered Terminal Assistant
 
@@ -26,6 +31,11 @@ TerML is an AI-powered terminal assistant that integrates seamlessly with your c
 - **Debug**: Analyze and debug command execution issues
 - **Chat**: Quick chat sessions for terminal and programming-related questions
 - **Auto**: Automated command suggestions for project setup with user approval
+- **Summarize**: Get a summary of the contents of a file or directory
+- **Generate**: Create new project structures with predefined templates
+- **Analyze**: Perform code analysis and receive AI-powered improvement suggestions
+- **Test**: Generate unit tests for your project
+- **Deps**: Manage project dependencies
 
 ## Installation
 
@@ -85,6 +95,53 @@ TerML integrates into your existing terminal workflow. Here are the main command
   TerML: What are you trying to achieve?
   You: Set up a new React project
   TerML: [Suggests a series of commands to set up a React project, asking for approval before each]
+  ```
+
+- `terml summarize [path]`: Get a summary of the contents of a file or directory
+  ```
+  $ terml summarize /path/to/file.py
+  TerML Summary: [Summary of the contents of file.py]
+
+  $ terml summarize /path/to/directory
+  TerML Summary: [Overview of the files and their purposes in the directory]
+  ```
+
+- `terml generate [project_type] [project_name]`: Generate a new project structure
+  ```
+  $ terml generate python my_new_project
+  Project 'my_new_project' of type 'python' has been generated at: /path/to/my_new_project
+  ```
+
+- `terml analyze [path]`: Analyze code and get improvement suggestions
+  ```
+  $ terml analyze /path/to/project
+  [Code analysis summary]
+  TerML AI Suggestions: [AI-powered suggestions for code improvements]
+  ```
+
+- `terml test [path]`: Generate unit tests for your project
+  ```
+  $ terml test /path/to/project
+  Generated 5 test files:
+    - /path/to/project/tests/test_module1.py
+    - /path/to/project/tests/test_module2.py
+    ...
+  TerML AI Test Improvement Suggestions: [AI-powered suggestions for test improvements]
+  ```
+
+- `terml deps [subcommand] [args]`: Manage project dependencies
+  ```
+  $ terml deps list
+  [List of current dependencies and their versions]
+
+  $ terml deps update
+  [Update all dependencies to their latest versions]
+
+  $ terml deps add requests
+  [Add the 'requests' library to the project]
+
+  $ terml deps remove requests
+  [Remove the 'requests' library from the project]
   ```
 
 ## License

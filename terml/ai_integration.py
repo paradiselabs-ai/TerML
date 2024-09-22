@@ -53,3 +53,17 @@ class AIIntegration:
             return "Error: The specified path is neither a file nor a directory."
 
         return self.get_ai_response(prompt, config.SUMMARIZE_PROMPT, config.SUMMARIZE_MAX_TOKENS)
+
+    def suggest_code_improvements(self, analysis_summary):
+        prompt = f"Based on the following code analysis summary, suggest improvements and best practices:\n\n{analysis_summary}"
+        return self.get_ai_response(prompt, config.CODE_IMPROVEMENT_PROMPT, config.CODE_IMPROVEMENT_MAX_TOKENS)
+
+    def suggest_test_improvements(self, project_path):
+        test_files = [f for f in os.listdir(project_path) if f.startswith('test_') and f.endswith('.py')]
+        test_contents = ""
+        for test_file in test_files:
+            with open(os.path.join(project_path, test_file), 'r') as f:
+                test_contents += f"File: {test_file}\n{f.read()}\n\n"
+        
+        prompt = f"Analyze the following test files and suggest improvements for better test coverage and quality:\n\n{test_contents}"
+        return self.get_ai_response(prompt, config.TEST_IMPROVEMENT_PROMPT, config.TEST_IMPROVEMENT_MAX_TOKENS)

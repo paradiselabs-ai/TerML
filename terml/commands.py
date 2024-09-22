@@ -1,5 +1,10 @@
 import click
+import os
 from . import config
+from .project_templates import create_project_structure, list_available_templates
+from .code_analyzer import analyze_project, get_analysis_summary
+from .test_generator import generate_and_write_tests
+from .dependency_manager import get_dependency_info, update_dependencies, add_dependency, remove_dependency
 
 class CommandExecutor:
     def __init__(self, terminal_handler, ai_integration):
@@ -20,7 +25,11 @@ class CommandExecutor:
             "chat": self._chat,
             "debug": self._debug,
             "auto": self._auto,
-            "summarize": self._summarize
+            "summarize": self._summarize,
+            "generate": self._generate_project,
+            "analyze": self._analyze_code,
+            "test": self._generate_tests,
+            "deps": self._manage_dependencies
         }
 
         if subcommand in command_map:
@@ -86,3 +95,104 @@ class CommandExecutor:
         path = args[0]
         summary = self.ai_integration.summarize_contents(path)
         click.echo(f"TerML Summary: {summary}")
+
+    def _generate_project(self, args):
+        if len(args) != 2:
+            click.echo("Error: The generate command requires two arguments: project type and project name.")
+            click.echo(f"Available project types: {', '.join(list_available_templates())}")
+            return
+        project_type, project_name = args
+        try:
+            project_path = create_project_structure(project_type, project_name)
+            click.echo(f"Project '{project_name}' of type '{project_type}' has been generated at: {project_path}")
+        except ValueError as e:
+            click.echo(f"Error: {str(e)}")
+            click.echo(f"Available project types: {', '.join(list_available_templates())}")
+
+    def _analyze_code(self, args):
+        if not args:
+            click.echo("Error: The analyze command requires a path argument.")
+            return
+        path = args[0]
+        if not os.path.exists(path):
+            click.echo(f"Error: The path '{path}' does not exist.")
+            return
+        issues = analyze_project(path)
+        summary = get_analysis_summary(issues)
+        click.echo(summary)
+        
+        # AI-powered suggestions for improvements
+        if issues:
+            suggestions = self.ai_integration.suggest_code_improvements(summary)
+            click.echo("\nTerML AI Suggestions:")
+            click.echo(suggestions)
+
+    def _generate_tests(self, args):
+        if not args:
+            click.echo("Error: The test command requires a path argument.")
+            return
+        path = args[0]
+        if not os.path.exists(path):
+            click.echo(f"Error: The path '{path}' does not exist.")
+            return
+        if not os.path.isdir(path):
+            click.echo(f"Error: The path '{path}' is not a directory.")
+            return
+        
+        generated_tests = generate_and_write_tests(path)
+        click.echo(f"Generated {len(generated_tests)} test files:")
+        for test_file in generated_tests:
+            click.echo(f"  - {test_file}")
+        
+        # AI-powered suggestions for test improvements
+        suggestions = self.ai_integration.suggest_test_improvements(path)
+        click.echo("\nTerML AI Test Improvement Suggestions:")
+        click.echo(suggestions)
+
+    def _manage_dependencies(self, args):
+        if not args:
+            click.echo("Error: The deps command requires a subcommand (list, update, add, remove).")
+            return
+        
+        subcommand = args[0]
+        project_path = os.getcwd()
+
+        if subcommand == "list":
+            dep_info = get_dependency_info(project_path)
+            click.echo(f"Total dependencies: {dep_info['total_dependencies']}")
+            click.echo(f"Outdated dependencies: {dep_info['outdated_dependencies']}")
+            click.echo("\nCurrent dependencies:")
+            for dep, version in dep_info['dependencies'].items():
+                click.echo(f"  - {dep}: {version}")
+            if dep_info['outdated']:
+                click.echo("\nOutdated dependencies:")
+                for dep in dep_info['outdated']:
+                    click.echo(f"  - {dep['name']}: {dep['version']} (Latest: {dep['latest_version']})")
+
+        elif subcommand == "update":
+            click.echo("Updating dependencies...")
+            update_dependencies(project_path)
+            click.echo("Dependencies updated successfully.")
+
+        elif subcommand == "add":
+            if len(args) < 2:
+                click.echo("Error: Please specify the dependency to add.")
+                return
+            dependency = args[1]
+            version = args[2] if len(args) > 2 else None
+            click.echo(f"Adding dependency: {dependency}")
+            add_dependency(project_path, dependency, version)
+            click.echo(f"Dependency {dependency} added successfully.")
+
+        elif subcommand == "remove":
+            if len(args) < 2:
+                click.echo("Error: Please specify the dependency to remove.")
+                return
+            dependency = args[1]
+            click.echo(f"Removing dependency: {dependency}")
+            remove_dependency(project_path, dependency)
+            click.echo(f"Dependency {dependency} removed successfully.")
+
+        else:
+            click.echo(f"Unknown deps subcommand: {subcommand}")
+            click.echo("Available subcommands: list, update, add, remove")
