@@ -6,6 +6,7 @@ class AIIntegration:
     def __init__(self):
         self.client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY)
         self.model = config.AI_MODEL
+        self.conversation_history = []
 
     def get_ai_response(self, prompt, system_prompt, max_tokens):
         try:
@@ -37,9 +38,28 @@ class AIIntegration:
         prompt = f"Generate a command to help set up a project with the following goal: '{goal}' and tech stack: '{tech_stack}'. Provide the command and a detailed explanation of what it does."
         return self.get_ai_response(prompt, config.AUTO_PROMPT, config.AUTO_MAX_TOKENS)
 
-    def chat_response(self, user_input):
-        prompt = f"Respond to this user query about terminal usage or programming: {user_input}"
-        return self.get_ai_response(prompt, config.CHAT_PROMPT, config.CHAT_MAX_TOKENS)
+    def chat_response(self, user_input, retain_memory=False):
+        if retain_memory:
+            self.conversation_history.append({"role": "user", "content": user_input})
+            messages = [{"role": "system", "content": config.CHAT_PROMPT}] + self.conversation_history
+            
+            try:
+                response = self.client.messages.create(
+                    model=self.model,
+                    max_tokens=config.CHAT_MAX_TOKENS,
+                    messages=messages
+                )
+                ai_response = response.content
+                self.conversation_history.append({"role": "assistant", "content": ai_response})
+                return ai_response
+            except Exception as e:
+                return f"Error: {str(e)}"
+        else:
+            prompt = f"Respond to this user query about terminal usage or programming: {user_input}"
+            return self.get_ai_response(prompt, config.CHAT_PROMPT, config.CHAT_MAX_TOKENS)
+
+    def clear_chat_history(self):
+        self.conversation_history = []
 
     def summarize_contents(self, path):
         if os.path.isfile(path):

@@ -148,16 +148,7 @@ If you encounter any problems or have any questions, please open an issue on the
 
 ## Recent Updates
 
-- Enhanced compatibility with the latest versions of httpx and httpcore
-- Improved AI integration for more accurate and helpful responses
-- Updated project structure and dependencies
-- All tests passing with the latest changes
-- Improved error handling and logging
-- Updated documentation to reflect recent changes
-- Refactored code for better maintainability and performance
-- Enhanced test coverage for core functionalities
-- Implemented more robust input validation and error handling
-- Optimized AI model interactions for faster response times
+For a detailed list of recent updates and changes in each version, please refer to the [CHANGELOG.md](CHANGELOG.md) file.
 
 ## Roadmap
 
