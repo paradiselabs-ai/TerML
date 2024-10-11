@@ -81,6 +81,27 @@ def test_chat_response(ai_integration):
         assert response == "To list files in a directory, use the 'ls' command."
         mock_get_ai_response.assert_called_once()
 
+def test_chat_response_with_memory(ai_integration):
+    with patch.object(AIIntegration, 'client') as mock_client:
+        mock_messages = MagicMock()
+        mock_message = MagicMock()
+        mock_message.content = "To list files in a directory, use the 'ls' command."
+        mock_messages.create.return_value = mock_message
+        mock_client.messages = mock_messages
+
+        user_input = "How do I list files in a directory?"
+        response = ai_integration.chat_response(user_input, retain_memory=True)
+        
+        assert response == "To list files in a directory, use the 'ls' command."
+        assert len(ai_integration.conversation_history) == 2
+        assert ai_integration.conversation_history[0] == {"role": "user", "content": user_input}
+        assert ai_integration.conversation_history[1] == {"role": "assistant", "content": response}
+
+def test_clear_chat_history(ai_integration):
+    ai_integration.conversation_history = [{"role": "user", "content": "Test"}]
+    ai_integration.clear_chat_history()
+    assert ai_integration.conversation_history == []
+
 def test_summarize_contents(ai_integration):
     with patch.object(AIIntegration, 'get_ai_response') as mock_get_ai_response, \
          patch('os.path.isfile') as mock_isfile, \

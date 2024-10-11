@@ -7,6 +7,7 @@ from terml.dependency_manager import get_dependency_info
 from terml.code_analyzer import analyze_project
 from terml.test_generator import generate_and_write_tests
 from terml.project_templates import create_project_structure, list_available_templates
+from terml.git_helper import analyze_git_state, provide_git_guidance, get_quick_git_help
 
 def test_terml_import():
     assert main is not None
@@ -34,6 +35,11 @@ def test_project_templates_exists():
     assert create_project_structure is not None
     assert list_available_templates is not None
 
+def test_git_helper_exists():
+    assert analyze_git_state is not None
+    assert provide_git_guidance is not None
+    assert get_quick_git_help is not None
+
 def test_command_executor_execute():
     mock_terminal_handler = MagicMock()
     mock_ai_integration = MagicMock()
@@ -41,7 +47,7 @@ def test_command_executor_execute():
     
     with patch.object(executor, 'execute') as mock_execute:
         executor.execute("terml test_command")
-        mock_execute.assert_called_once_with("terml test_command")
+        mock_execute.assert_called_once_with("terml test_command", retain_memory=False)
 
 @patch('terml.dependency_manager.get_project_type')
 @patch('terml.dependency_manager.check_outdated_dependencies')
@@ -84,22 +90,16 @@ def test_generate_and_write_tests(mock_generate):
     ]
     mock_generate.return_value = expected_result
 
-    # Change this line to use the mock directly
     result = mock_generate("test_project")
 
-    print(f"Mock return value: {mock_generate.return_value}")
-    print(f"Actual result: {result}")
-    print(f"Mock called with: {mock_generate.call_args}")
-
     assert result == expected_result
+    mock_generate.assert_called_once_with("test_project")
 
 @patch('terml.project_templates.create_project_structure')
 def test_create_project_structure(mock_create):
     expected_path = "/Users/cooper/Desktop/AI_ML/Creating/ParadiseLabs/My AI Projects/TerML/new_project"
     mock_create.return_value = expected_path
 
-    # Call the actual function, not the mock
-    from terml.project_templates import create_project_structure
     result = create_project_structure("python", "new_project")
 
     assert result == expected_path
@@ -109,6 +109,45 @@ def test_list_available_templates():
     with patch('terml.project_templates.TEMPLATES', {"python": {}, "javascript": {}, "react": {}}):
         result = list_available_templates()
         assert result == ["python", "javascript", "react"]
+
+@patch('terml.git_helper.subprocess.run')
+def test_analyze_git_state(mock_run):
+    mock_run.side_effect = [
+        MagicMock(returncode=0),  # git rev-parse
+        MagicMock(stdout="M file1.py\n?? file2.py"),  # git status
+        MagicMock(stdout="main")  # git rev-parse --abbrev-ref HEAD
+    ]
+
+    state, details = analyze_git_state()
+
+    assert state == "Changes present"
+    assert "Currently on branch 'main'" in details
+    assert "1 file(s) modified" in details
+    assert "1 untracked file(s)" in details
+
+def test_provide_git_guidance():
+    state = "Changes present"
+    details = [
+        "Currently on branch 'main'",
+        "1 file(s) modified",
+        "1 untracked file(s)"
+    ]
+
+    guidance = provide_git_guidance(state, details)
+
+    assert "You have modified files" in guidance
+    assert "You have untracked files" in guidance
+
+def test_get_quick_git_help():
+    help_text = get_quick_git_help()
+
+    assert "Common Git Commands:" in help_text
+    assert "git init:" in help_text
+    assert "git clone" in help_text
+    assert "git add" in help_text
+    assert "git commit" in help_text
+    assert "git push" in help_text
+    assert "git pull" in help_text
 
 if __name__ == "__main__":
     pytest.main([__file__])

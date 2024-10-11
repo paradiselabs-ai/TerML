@@ -23,35 +23,61 @@ Current and Upcoming Tasks:
    d. Implement interactive git learning session
    e. Implement quick Q&A session for git
 
-3. [UPCOMING] Implement Additional Command Categories
+3. [IN PROGRESS] Project Structure Cleanup and Refactoring
+   a. [COMPLETED] Remove unnecessary nested project copies (src directory)
+   b. [COMPLETED] Remove build and egg-info directories
+   c. [COMPLETED] Verify pyproject.toml configuration
+   d. [COMPLETED] Verify MANIFEST.in
+   e. [COMPLETED] Remove CI/CD workflow (yml file)
+   f. [COMPLETED] Review and update test files
+
+4. [UPCOMING] Implement Additional Command Categories
    - Create os_helper.py
    - Create network_helper.py
    - Create file_search.py
    - Create file_management.py
    - Create framework_helper.py
 
-4. Extend main.py for new command categories
+5. Extend main.py for new command categories
 
-5. Implement Lesson System
+6. Implement Lesson System
    - Create lesson_system.py
    - Integrate with each command category
 
-6. Update Project Structure
+7. Update Project Structure
    - Create lessons directory
    - Create YAML or JSON files for lesson structures
 
-7. Enhance AI Integration
+8. Enhance AI Integration
 
-8. Update Documentation
+9. Update Documentation
 
-9. Develop and Implement Tests
+10. Develop and Implement Tests
 
-10. Implement User Experience Improvements
+11. Implement User Experience Improvements
 
 Next immediate steps:
 1. Implement the revert functionality for auto mode
 2. Implement interactive git learning session
 3. Implement quick Q&A session for git
+4. Start implementing additional command categories (os_helper.py)
+
+{Quick Ideas for Future Development - never omit this section:
+- Develop an AIDER-like application with improved teaching lessons
+- Create a model fine-tuning environment or prompt engineering environment
+- Integrate Claude 3.5 Sonnet with additional tools:
+  - Code interpretation
+  - Vision capabilities
+  - Prompt caching
+- Add support for multiple LLMs
+- Implement an AIDER + AutoGen CLI app for project assistance:
+  - Create project file structures
+  - Collaborative troubleshooting
+  - Integrate a Perplexity model for web searches and framework documentation lookup
+- Implement `terml agent-boosted start-project <project name>` command:
+  - Utilize multiple AI agents for collaborative project development
+  - Incorporate code interpretation for file writing
+  - Use Perplexity for fact-checking and framework documentation lookup}
 
 IMPORTANT: NEVER OMIT WORKING CODE, CODE UNRELATED TO THE CURRENT TASK, OR CODE THAT IS NOT PART OF ANY CURRENT TASK. NEVER OMIT; ONLY CHANGE the parts of code that have to do precisely with the current task.
 
