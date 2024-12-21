@@ -1,0 +1,81 @@
+{
+  "title": "Git Rebasing",
+  "description": "Learn how to rewrite history and maintain a clean project timeline using git rebase",
+  "prerequisites": [
+    {
+      "category": "git",
+      "lesson": "01_basics"
+    },
+    {
+      "category": "git",
+      "lesson": "02_branching"
+    },
+    {
+      "category": "git",
+      "lesson": "03_merging"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Understanding Rebase",
+      "content": "Rebase rewrites commit history:\n\nKey concepts:\n- Moving commits to new base\n- Linear history vs. merge commits\n- Rewriting public history risks\n- Interactive rebasing\n\nDifferences from merge:\n- Merge: Preserves history\n- Rebase: Creates linear history\n- Merge: Safe for public branches\n- Rebase: Best for local branches",
+      "exercise": 0
+    },
+    {
+      "title": "Basic Rebasing",
+      "content": "Rebase your branch onto latest main:\n\nSteps:\n1. git checkout feature-branch\n2. git rebase main\n3. Resolve any conflicts\n4. git push --force-with-lease (if needed)\n\nCommon scenarios:\n- Update feature branch\n- Clean up local history\n- Incorporate upstream changes\n\nWarning: Never rebase public/shared branches!",
+      "exercise": 1,
+      "practical_task": {
+        "id": 0,
+        "description": "Create a feature branch, make changes, then rebase it onto main. Type 'done' when complete.",
+        "expected_results": ["done"]
+      }
+    },
+    {
+      "title": "Interactive Rebasing",
+      "content": "Modify commit history interactively:\n\nCommand: git rebase -i <commit>\n\nOptions:\n- pick: Keep commit as-is\n- reword: Change message\n- edit: Amend commit\n- squash: Combine with previous\n- fixup: Combine and discard message\n- drop: Remove commit\n\nCommon uses:\n- Squash related commits\n- Fix commit messages\n- Remove unnecessary commits\n- Split large commits",
+      "exercise": 2,
+      "practical_task": {
+        "id": 1,
+        "description": "Use interactive rebase to squash your last two commits. What command starts interactive rebase?",
+        "expected_results": [
+          "git rebase -i",
+          "git rebase -i HEAD~2",
+          "git rebase --interactive"
+        ]
+      }
+    },
+    {
+      "title": "Handling Rebase Conflicts",
+      "content": "Resolve conflicts during rebase:\n\nWhen conflicts occur:\n1. Fix conflicts in files\n2. git add resolved files\n3. git rebase --continue\n\nOther options:\n- git rebase --abort: Cancel rebase\n- git rebase --skip: Skip current commit\n\nBest practices:\n- Small, focused commits\n- Regular rebasing\n- Clear commit messages\n- Backup branches",
+      "exercise": 3,
+      "practical_task": {
+        "id": 2,
+        "description": "Create and resolve a rebase conflict. Type 'done' when resolved.",
+        "expected_results": ["done"]
+      }
+    }
+  ],
+  "exercises": [
+    {
+      "question": "What is the main difference between merge and rebase?",
+      "answer": "linear history",
+      "explanation": "Rebase creates a linear history by moving commits to a new base, while merge preserves the branch history with a merge commit."
+    },
+    {
+      "question": "What command starts an interactive rebase?",
+      "answer": "git rebase -i",
+      "explanation": "git rebase -i <commit> starts an interactive rebase session where you can modify commits."
+    },
+    {
+      "question": "What command continues a rebase after resolving conflicts?",
+      "answer": "git rebase --continue",
+      "explanation": "After resolving conflicts, use git rebase --continue to proceed with the rebase operation."
+    },
+    {
+      "question": "What flag safely force pushes after rebase?",
+      "answer": "--force-with-lease",
+      "explanation": "git push --force-with-lease is safer than --force as it checks if the remote branch has been updated."
+    }
+  ]
+}
