@@ -37,7 +37,34 @@ class CommandExecutor:
         else:
             click.echo(f"Unknown TerML command. Use 'terml --help' for available commands.")
 
-    # ... (other methods remain unchanged)
+    def _explain(self, args, retain_memory=False):
+        last_output = self.terminal_handler.get_last_output()
+        explanation = self.ai_integration.explain_output(last_output)
+        click.echo(f"TerML: {explanation}")
+
+    def _suggest(self, args, retain_memory=False):
+        history = self.terminal_handler.get_formatted_history()
+        suggestion = self.ai_integration.suggest_command(history)
+        click.echo(f"TerML suggests: {suggestion}")
+
+    def _chat(self, args, retain_memory=False):
+        if args and args[0] == "-q":
+            retain_memory = False
+        
+        click.echo("TerML: Starting chat mode.")
+        while True:
+            user_input = click.prompt("You")
+            if user_input.lower() == 'exit':
+                click.echo("TerML: Exiting chat mode.")
+                break
+            response = self.ai_integration.chat_response(user_input, retain_memory)
+            click.echo(f"TerML: {response}")
+
+    def _debug(self, args, retain_memory=False):
+        last_command = self.terminal_handler.get_last_command()
+        last_output = self.terminal_handler.get_last_output()
+        debug_info = self.ai_integration.debug_command(last_command, last_output)
+        click.echo(f"TerML: {debug_info}")
 
     def _auto(self, args, retain_memory=False):
         with_user = "--with-user" in args
@@ -89,4 +116,109 @@ class CommandExecutor:
                     click.echo("TerML: Exiting auto mode.")
                     break
 
-    # ... (other methods remain unchanged)
+    def _summarize(self, args, retain_memory=False):
+        if not args:
+            click.echo("Error: The summarize command requires a path argument.")
+            return
+        path = args[0]
+        summary = self.ai_integration.summarize_contents(path)
+        click.echo(f"TerML Summary: {summary}")
+
+    def _generate_project(self, args, retain_memory=False):
+        if len(args) != 2:
+            click.echo("Error: The generate command requires two arguments: project type and project name.")
+            click.echo(f"Available project types: {', '.join(list_available_templates())}")
+            return
+        project_type, project_name = args
+        try:
+            project_path = create_project_structure(project_type, project_name)
+            click.echo(f"Project '{project_name}' of type '{project_type}' has been generated at: {project_path}")
+        except ValueError as e:
+            click.echo(f"Error: {str(e)}")
+            click.echo(f"Available project types: {', '.join(list_available_templates())}")
+
+    def _analyze_code(self, args, retain_memory=False):
+        if not args:
+            click.echo("Error: The analyze command requires a path argument.")
+            return
+        path = args[0]
+        if not os.path.exists(path):
+            click.echo(f"Error: The path '{path}' does not exist.")
+            return
+        issues = analyze_project(path)
+        summary = get_analysis_summary(issues)
+        click.echo(summary)
+        
+        if issues:
+            suggestions = self.ai_integration.suggest_code_improvements(summary)
+            click.echo("\nTerML AI Suggestions:")
+            click.echo(suggestions)
+
+    def _generate_tests(self, args, retain_memory=False):
+        if not args:
+            click.echo("Error: The test command requires a path argument.")
+            return
+        path = args[0]
+        if not os.path.exists(path):
+            click.echo(f"Error: The path '{path}' does not exist.")
+            return
+        if not os.path.isdir(path):
+            click.echo(f"Error: The path '{path}' is not a directory.")
+            return
+        
+        generated_tests = generate_and_write_tests(path)
+        click.echo(f"Generated {len(generated_tests)} test files:")
+        for test_file in generated_tests:
+            click.echo(f"  - {test_file}")
+        
+        suggestions = self.ai_integration.suggest_test_improvements(path)
+        click.echo("\nTerML AI Test Improvement Suggestions:")
+        click.echo(suggestions)
+
+    def _manage_dependencies(self, args, retain_memory=False):
+        if not args:
+            click.echo("Error: The deps command requires a subcommand (list, update, add, remove).")
+            return
+        
+        subcommand = args[0]
+        project_path = os.getcwd()
+
+        if subcommand == "list":
+            dep_info = get_dependency_info(project_path)
+            click.echo(f"Total dependencies: {dep_info['total_dependencies']}")
+            click.echo(f"Outdated dependencies: {dep_info['outdated_dependencies']}")
+            click.echo("\nCurrent dependencies:")
+            for dep, version in dep_info['dependencies'].items():
+                click.echo(f"  - {dep}: {version}")
+            if dep_info['outdated']:
+                click.echo("\nOutdated dependencies:")
+                for dep in dep_info['outdated']:
+                    click.echo(f"  - {dep['name']}: {dep['version']} (Latest: {dep['latest_version']})")
+
+        elif subcommand == "update":
+            click.echo("Updating dependencies...")
+            update_dependencies(project_path)
+            click.echo("Dependencies updated successfully.")
+
+        elif subcommand == "add":
+            if len(args) < 2:
+                click.echo("Error: Please specify the dependency to add.")
+                return
+            dependency = args[1]
+            version = args[2] if len(args) > 2 else None
+            click.echo(f"Adding dependency: {dependency}")
+            add_dependency(project_path, dependency, version)
+            click.echo(f"Dependency {dependency} added successfully.")
+
+        elif subcommand == "remove":
+            if len(args) < 2:
+                click.echo("Error: Please specify the dependency to remove.")
+                return
+            dependency = args[1]
+            click.echo(f"Removing dependency: {dependency}")
+            remove_dependency(project_path, dependency)
+            click.echo(f"Dependency {dependency} removed successfully.")
+
+        else:
+            click.echo(f"Unknown deps subcommand: {subcommand}")
+            click.echo("Available subcommands: list, update, add, remove")

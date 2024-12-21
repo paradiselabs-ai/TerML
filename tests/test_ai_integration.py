@@ -82,7 +82,7 @@ def test_chat_response(ai_integration):
         mock_get_ai_response.assert_called_once()
 
 def test_chat_response_with_memory(ai_integration):
-    with patch.object(AIIntegration, 'client') as mock_client:
+    with patch.object(ai_integration, 'client') as mock_client:
         mock_messages = MagicMock()
         mock_message = MagicMock()
         mock_message.content = "To list files in a directory, use the 'ls' command."

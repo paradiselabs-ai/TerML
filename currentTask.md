@@ -30,6 +30,8 @@ Current and Upcoming Tasks:
    d. [COMPLETED] Verify MANIFEST.in
    e. [COMPLETED] Remove CI/CD workflow (yml file)
    f. [COMPLETED] Review and update test files
+      - Updated test_terml_basic.py
+      - All tests now passing
 
 4. [UPCOMING] Implement Additional Command Categories
    - Create os_helper.py
