@@ -1,0 +1,64 @@
+{
+  "title": "Network Command Basics",
+  "description": "Learn essential network commands and tools for command-line operations",
+  "prerequisites": [
+    {
+      "category": "shell",
+      "lesson": "01_navigation"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Essential Network Commands",
+      "content": "Common network commands you'll use frequently:\n\n- ping: Test connectivity\n- curl: Transfer data and make HTTP requests\n- wget: Download files\n- ssh: Secure shell access\n- scp: Secure file copy\n- netstat/ss: Network statistics\n\nThese tools are crucial for remote operations and troubleshooting.",
+      "exercise": 0
+    },
+    {
+      "title": "Testing Connectivity",
+      "content": "The ping command is your first tool for network diagnostics:\n\n- Basic usage: ping example.com\n- Limited pings: ping -c 4 example.com\n- Check response time: Look at 'time=' values\n\nCommon ping patterns:\n- Continuous ping: ping host\n- Quick test: ping -c 1 host\n- With timestamp: ping -D host",
+      "exercise": 1,
+      "practical_task": {
+        "id": 0,
+        "description": "Test connectivity to google.com with exactly 3 pings. What command did you use?",
+        "expected_results": ["ping -c 3 google.com"]
+      }
+    },
+    {
+      "title": "Working with HTTP",
+      "content": "curl is a powerful tool for HTTP operations:\n\n- GET request: curl url\n- Download file: curl -O url\n- Show headers: curl -I url\n- POST request: curl -X POST url\n- With data: curl -d \"data\" url\n\nCommon flags:\n- -v: Verbose output\n- -L: Follow redirects\n- -H: Add headers",
+      "exercise": 2,
+      "practical_task": {
+        "id": 1,
+        "description": "Make a GET request to https://api.github.com/zen. What command did you use?",
+        "expected_results": ["curl https://api.github.com/zen"]
+      }
+    },
+    {
+      "title": "Downloading Files",
+      "content": "wget specializes in file downloads:\n\n- Basic download: wget url\n- Save as: wget -O filename url\n- Continue partial: wget -c url\n- Recursive: wget -r url\n- With auth: wget --user=x --password=y url\n\nBest practices:\n- Always use -c for large files\n- Check integrity after download\n- Use -P to specify directory",
+      "exercise": 3
+    }
+  ],
+  "exercises": [
+    {
+      "question": "What command tests basic connectivity to a host?",
+      "answer": "ping",
+      "explanation": "ping sends ICMP echo requests to test if a host is reachable and measure response time."
+    },
+    {
+      "question": "What flag limits ping to a specific number of attempts?",
+      "answer": "-c",
+      "explanation": "ping -c NUMBER sends exactly NUMBER pings and then stops."
+    },
+    {
+      "question": "What command is best for making HTTP requests?",
+      "answer": "curl",
+      "explanation": "curl is a versatile tool for transferring data with URLs and making HTTP requests."
+    },
+    {
+      "question": "What wget flag continues a partial download?",
+      "answer": "-c",
+      "explanation": "wget -c resumes a partial download instead of starting over."
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "title": "Git Basics",
+  "description": "Learn the fundamental concepts and commands of Git version control",
+  "prerequisites": [],
+  "steps": [
+    {
+      "title": "Understanding Version Control",
+      "content": "Version control is a system that records changes to files over time. Git is a distributed version control system that helps you track changes in your code, collaborate with others, and maintain a complete history of your project.\n\nKey benefits of Git:\n- Track changes to your code\n- Collaborate with others\n- Maintain history\n- Work on different versions simultaneously\n- Recover previous versions",
+      "exercise": 0
+    },
+    {
+      "title": "Initializing a Git Repository",
+      "content": "To start using Git in a project, you need to initialize a repository using 'git init'. This creates a .git directory that stores all the version control information.\n\nTry it yourself:\n1. Create a new directory\n2. Navigate into it\n3. Run 'git init'\n4. Use 'ls -la' to see the hidden .git directory",
+      "exercise": 1,
+      "practical_task": {
+        "id": 0,
+        "description": "Create a new directory called 'my-git-project', navigate into it, and initialize a git repository. Type 'done' when you've completed these steps.",
+        "expected_results": ["done"]
+      }
+    },
+    {
+      "title": "Basic Git Commands",
+      "content": "Let's learn the most essential Git commands:\n\ngit status - Check the status of your repository\ngit add - Stage changes for commit\ngit commit - Save staged changes\ngit log - View commit history\n\nWe'll practice each of these commands in detail.",
+      "exercise": 2
+    },
+    {
+      "title": "Making Your First Commit",
+      "content": "A commit is a snapshot of your changes. To make a commit:\n\n1. Create or modify files\n2. Use 'git add' to stage changes\n3. Use 'git commit -m \"message\"' to commit\n\nGood commit messages are important! They should be clear and descriptive.",
+      "exercise": 3,
+      "practical_task": {
+        "id": 1,
+        "description": "Create a file, stage it, and make your first commit. Type the commit message you used.",
+        "expected_results": ["Initial commit", "First commit", "Add first file"]
+      }
+    }
+  ],
+  "exercises": [
+    {
+      "question": "What is the main purpose of version control?",
+      "answer": "track changes",
+      "explanation": "Version control systems track changes to files over time, allowing you to review and revert to previous versions if needed."
+    },
+    {
+      "question": "What command initializes a new Git repository?",
+      "answer": "git init",
+      "explanation": "git init creates a new Git repository by creating a .git directory to store version control information."
+    },
+    {
+      "question": "What command shows the current state of your repository?",
+      "answer": "git status",
+      "explanation": "git status shows which files are modified, staged, or untracked."
+    },
+    {
+      "question": "What command saves staged changes to the repository?",
+      "answer": "git commit",
+      "explanation": "git commit creates a new commit with your staged changes and a descriptive message."
+    }
+  ]
+}

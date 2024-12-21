@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Interactive learning system with multiple categories:
+  - Git fundamentals and best practices
+  - Shell navigation and commands
+  - Network tools and diagnostics
+  - Package manager essentials
+- New CLI commands:
+  - `terml git learn -t`: Interactive git tutorials
+  - `terml git learn -q`: Quick git reference
+  - `terml git learn -qt`: Git Q&A session
+  - `terml learn <category>`: Access lesson categories
+- Revert functionality for auto mode commands
+- Progress tracking for learning sessions
+
+### Changed
+- Enhanced git command handling with context-aware responses
+- Improved CLI interface with learning commands
+- Updated command executor with lesson integration
+
 ## [0.4.1] - 2024-XX-XX
 
 ### Changed

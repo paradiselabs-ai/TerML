@@ -1,0 +1,88 @@
+{
+  "title": "Git Remote Operations",
+  "description": "Learn how to work with remote repositories and collaborate with others",
+  "prerequisites": [
+    {
+      "category": "git",
+      "lesson": "01_basics"
+    },
+    {
+      "category": "git",
+      "lesson": "02_branching"
+    },
+    {
+      "category": "git",
+      "lesson": "03_merging"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Understanding Remote Repositories",
+      "content": "Remote repositories are hosted versions of your project:\n\nKey concepts:\n- Remote: A hosted copy of your repository\n- Origin: Default name for primary remote\n- Upstream: Original repository (if forked)\n- Tracking branch: Local branch linked to remote\n\nCommon hosting platforms:\n- GitHub\n- GitLab\n- Bitbucket\n- Azure DevOps",
+      "exercise": 0
+    },
+    {
+      "title": "Remote Management",
+      "content": "Basic remote operations:\n\nViewing remotes:\n- git remote: List remotes\n- git remote -v: Show URLs\n- git remote show origin: Detailed info\n\nModifying remotes:\n- git remote add <name> <url>\n- git remote rename <old> <new>\n- git remote remove <name>\n- git remote set-url <name> <url>\n\nExample:\ngit remote add origin https://github.com/user/repo.git",
+      "exercise": 1,
+      "practical_task": {
+        "id": 0,
+        "description": "Add a remote named 'origin' pointing to your repository. What command did you use?",
+        "expected_results": [
+          "git remote add origin",
+          "git remote add origin https://"
+        ]
+      }
+    },
+    {
+      "title": "Fetching and Pulling",
+      "content": "Getting remote changes:\n\nFetch operations:\n- git fetch: Download objects and refs\n- git fetch origin: From specific remote\n- git fetch --all: From all remotes\n- git fetch --prune: Clean up deleted refs\n\nPull operations:\n- git pull: Fetch and merge\n- git pull --rebase: Rebase instead of merge\n- git pull origin main: From specific branch\n\nDifferences:\n- fetch: Safe, doesn't modify working tree\n- pull: Combines fetch and merge/rebase",
+      "exercise": 2,
+      "practical_task": {
+        "id": 1,
+        "description": "Fetch changes from remote and view them without merging. What commands did you use?",
+        "expected_results": [
+          "git fetch && git log origin/main",
+          "git fetch && git diff origin/main",
+          "git fetch && git show origin/main"
+        ]
+      }
+    },
+    {
+      "title": "Pushing Changes",
+      "content": "Sharing your changes:\n\nBasic push:\n- git push: Upload commits\n- git push origin main: Specific branch\n- git push -u origin main: Set upstream\n\nAdvanced options:\n- git push --force: Overwrite history (careful!)\n- git push --force-with-lease: Safer force push\n- git push --tags: Include tags\n- git push --all: All branches\n\nBest practices:\n- Pull before pushing\n- Never force push shared branches\n- Use branch protection\n- Keep commits clean",
+      "exercise": 3,
+      "practical_task": {
+        "id": 2,
+        "description": "Push your changes and set up tracking. What command sets up tracking on first push?",
+        "expected_results": [
+          "git push -u",
+          "git push --set-upstream",
+          "-u"
+        ]
+      }
+    }
+  ],
+  "exercises": [
+    {
+      "question": "What is the default name for the main remote?",
+      "answer": "origin",
+      "explanation": "By convention, the primary remote repository is named 'origin' when you clone or set up a repository."
+    },
+    {
+      "question": "What command downloads changes without merging?",
+      "answer": "git fetch",
+      "explanation": "git fetch safely downloads remote changes without modifying your working tree, allowing you to review changes before merging."
+    },
+    {
+      "question": "What command combines fetch and merge?",
+      "answer": "git pull",
+      "explanation": "git pull performs a git fetch followed by a git merge (or rebase) to integrate remote changes into your current branch."
+    },
+    {
+      "question": "What flag sets up branch tracking?",
+      "answer": "-u",
+      "explanation": "The -u or --set-upstream flag establishes a tracking relationship between local and remote branches."
+    }
+  ]
+}

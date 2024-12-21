@@ -1,0 +1,77 @@
+{
+  "title": "Git Merging and Conflict Resolution",
+  "description": "Learn how to combine changes from different branches and resolve conflicts",
+  "prerequisites": [
+    {
+      "category": "git",
+      "lesson": "01_basics"
+    },
+    {
+      "category": "git",
+      "lesson": "02_branching"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Understanding Merging",
+      "content": "Merging combines changes from different branches:\n\nTypes of merges:\n- Fast-forward: When target branch is direct descendant\n- Recursive: When branches have diverged\n- Squash: Combine all changes into one commit\n\nKey concepts:\n- Common ancestor: Point where branches diverged\n- Merge base: Reference point for combining changes\n- Merge commit: Special commit with multiple parents\n- Clean working directory: Required for merging",
+      "exercise": 0
+    },
+    {
+      "title": "Basic Merging",
+      "content": "Steps to merge a feature branch:\n\n1. Ensure working directory is clean (git status)\n2. Switch to target branch: git checkout main\n3. Merge source branch: git merge feature-branch\n4. Push merged changes: git push\n\nCommon merge flags:\n- --no-ff: Create merge commit even for fast-forward\n- --squash: Combine all changes into one commit\n- --abort: Cancel problematic merge",
+      "exercise": 1,
+      "practical_task": {
+        "id": 0,
+        "description": "Create a feature branch, make changes, then merge it back to main. Type 'done' when complete.",
+        "expected_results": ["done"]
+      }
+    },
+    {
+      "title": "Handling Merge Conflicts",
+      "content": "Conflicts occur when same lines change in both branches:\n\nConflict markers in files:\n<<<<<<< HEAD\nYour changes in current branch\n=======\nIncoming changes from other branch\n>>>>>>> feature-branch\n\nSteps to resolve:\n1. Open conflicted files\n2. Choose desired changes\n3. Remove conflict markers\n4. git add resolved files\n5. git commit to complete merge",
+      "exercise": 2,
+      "practical_task": {
+        "id": 1,
+        "description": "Create and resolve a merge conflict by changing the same line in two branches. Type 'done' when resolved.",
+        "expected_results": ["done"]
+      }
+    },
+    {
+      "title": "Advanced Merging Strategies",
+      "content": "Different approaches to merging:\n\nMerge Strategies:\n- ours: Keep our version of conflicting changes\n- theirs: Keep their version of conflicting changes\n- octopus: Merge multiple branches at once\n\nTools and Commands:\n- git mergetool: Launch visual merge tool\n- git diff: Compare branches before merge\n- git log --graph: Visualize branch history\n\nBest Practices:\n- Keep commits small and focused\n- Merge frequently to reduce conflicts\n- Write clear commit messages\n- Review changes before merging\n- Test after resolving conflicts",
+      "exercise": 3,
+      "practical_task": {
+        "id": 2,
+        "description": "Use git log --graph to visualize your branch history. What command shows a compact version?",
+        "expected_results": [
+          "git log --graph --oneline",
+          "git log --graph --oneline --decorate",
+          "git log --graph --pretty=oneline"
+        ]
+      }
+    }
+  ],
+  "exercises": [
+    {
+      "question": "What is a fast-forward merge?",
+      "answer": "direct descendant",
+      "explanation": "A fast-forward merge occurs when the target branch is a direct descendant of the source branch, allowing Git to simply move the pointer forward."
+    },
+    {
+      "question": "What command merges a feature branch into main?",
+      "answer": "git merge",
+      "explanation": "Use git merge <branch-name> to merge changes from the specified branch into your current branch."
+    },
+    {
+      "question": "What should you do after resolving merge conflicts?",
+      "answer": "git add",
+      "explanation": "After resolving conflicts, use git add to stage the resolved files, then git commit to complete the merge."
+    },
+    {
+      "question": "What command aborts a problematic merge?",
+      "answer": "git merge --abort",
+      "explanation": "git merge --abort cancels the current merge operation and returns the repository to its pre-merge state."
+    }
+  ]
+}

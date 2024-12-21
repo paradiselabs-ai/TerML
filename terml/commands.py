@@ -5,11 +5,13 @@ from .project_templates import create_project_structure, list_available_template
 from .code_analyzer import analyze_project, get_analysis_summary
 from .test_generator import generate_and_write_tests
 from .dependency_manager import get_dependency_info, update_dependencies, add_dependency, remove_dependency
+from .git_helper import analyze_git_state, provide_git_guidance, get_quick_git_help, GitLearningSession
 
 class CommandExecutor:
     def __init__(self, terminal_handler, ai_integration):
         self.terminal_handler = terminal_handler
         self.ai_integration = ai_integration
+        self.git_session = GitLearningSession()
 
     def execute(self, command, retain_memory=False):
         parts = command.split()
@@ -29,7 +31,9 @@ class CommandExecutor:
             "generate": self._generate_project,
             "analyze": self._analyze_code,
             "test": self._generate_tests,
-            "deps": self._manage_dependencies
+            "deps": self._manage_dependencies,
+            "git": self._handle_git_command,
+            "learn": self._handle_learn_command
         }
 
         if subcommand in command_map:
@@ -67,6 +71,15 @@ class CommandExecutor:
         click.echo(f"TerML: {debug_info}")
 
     def _auto(self, args, retain_memory=False):
+        # Handle revert subcommand
+        if args and args[0] == "revert":
+            success, message = self.terminal_handler.revert_last_auto_command()
+            if success:
+                click.echo(f"TerML: Successfully reverted last auto command. {message}")
+            else:
+                click.echo(f"TerML: {message}")
+            return
+
         with_user = "--with-user" in args
         quick_mode = "-q" in args
 
@@ -79,7 +92,7 @@ class CommandExecutor:
             click.echo("ParadiseLabs and Anthropic will not be responsible for any potential damage.")
             click.echo("Please use caution and keep watch over TerML in auto mode.")
             click.echo("Use CTRL + C to exit auto mode instantly at any time.")
-            click.echo("Note: 'terml auto revert' will only revert the last command ran by TerML in auto mode.")
+            click.echo("Note: 'terml auto revert' will revert the last command ran by TerML in auto mode.")
             if not click.confirm("Do you want to proceed?"):
                 return
 
@@ -95,7 +108,7 @@ class CommandExecutor:
                 if with_user:
                     if not click.confirm("Would you like to proceed?"):
                         continue
-                output, error = self.terminal_handler.execute_command(suggestion)
+                output, error = self.terminal_handler.execute_command(suggestion, is_auto_mode=True)
                 click.echo(output)
                 if error:
                     click.echo(f"Error: {error}")
@@ -106,7 +119,7 @@ class CommandExecutor:
                 click.echo(f"TerML suggests: {suggestion}")
                 click.echo("This command will: [explanation of what the command does]")
                 if click.confirm("Would you like to proceed?"):
-                    output, error = self.terminal_handler.execute_command(suggestion)
+                    output, error = self.terminal_handler.execute_command(suggestion, is_auto_mode=True)
                     click.echo(output)
                     if error:
                         click.echo(f"Error: {error}")
@@ -222,3 +235,55 @@ class CommandExecutor:
         else:
             click.echo(f"Unknown deps subcommand: {subcommand}")
             click.echo("Available subcommands: list, update, add, remove")
+
+    def _handle_git_command(self, args, retain_memory=False):
+        """Handle git-related commands"""
+        if not args:
+            click.echo("Error: Git command requires a subcommand (status, learn, help).")
+            return
+
+        subcommand = args[0]
+        if subcommand == "status":
+            state, details = analyze_git_state()
+            click.echo("\nGit Repository Status:")
+            click.echo("\n".join(f"- {detail}" for detail in details))
+            click.echo("\nGuidance:")
+            click.echo(provide_git_guidance(state, details))
+
+        elif subcommand == "learn":
+            if len(args) > 1:
+                if args[1] == "-t":  # Interactive tutorial
+                    self.git_session.start_lesson()
+                elif args[1] == "-q":  # Quick help
+                    click.echo(get_quick_git_help())
+                elif args[1] == "-qt":  # Quick Q&A
+                    self.git_session.start_quick_qa()
+                else:
+                    click.echo("Invalid option. Use -t for tutorial, -q for quick help, or -qt for Q&A.")
+            else:
+                self.git_session.show_available_lessons()
+
+        elif subcommand == "help":
+            click.echo(get_quick_git_help())
+
+        else:
+            click.echo(f"Unknown git subcommand: {subcommand}")
+            click.echo("Available subcommands: status, learn, help")
+
+    def _handle_learn_command(self, args, retain_memory=False):
+        """Handle learning system commands"""
+        if not args:
+            click.echo("Error: Learn command requires a category (git, shell, network, tools).")
+            return
+
+        category = args[0]
+        if len(args) > 1:
+            lesson_id = args[1]
+            if category == "git":
+                self.git_session.start_lesson(lesson_id)
+            else:
+                click.echo(f"Starting lesson '{lesson_id}' in category '{category}'...")
+                self.git_session.lesson_manager.start_interactive_session(category, lesson_id)
+        else:
+            click.echo(f"\nAvailable lessons in category '{category}':")
+            self.git_session.lesson_manager.show_category_progress(category)

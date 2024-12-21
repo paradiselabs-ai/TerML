@@ -1,0 +1,59 @@
+{
+  "title": "Shell Navigation Basics",
+  "description": "Learn essential shell commands for navigating the file system",
+  "prerequisites": [],
+  "steps": [
+    {
+      "title": "Understanding the File System",
+      "content": "The file system is organized in a tree-like structure of directories (folders) and files. Important concepts:\n\n- Root directory (/): The top-level directory\n- Home directory (~): Your user's home folder\n- Current directory (.): The directory you're in\n- Parent directory (..): The directory above current\n\nPaths can be:\n- Absolute (starting from root): /Users/username/Documents\n- Relative (from current location): ./documents",
+      "exercise": 0
+    },
+    {
+      "title": "Basic Navigation Commands",
+      "content": "Essential commands for moving around:\n\n- pwd: Print Working Directory (shows where you are)\n- ls: List directory contents\n- cd: Change Directory\n\nCommon usage:\n- cd ~ (go to home)\n- cd .. (go up one level)\n- cd /path/to/directory (go to specific location)",
+      "exercise": 1,
+      "practical_task": {
+        "id": 0,
+        "description": "Navigate to your home directory, then list its contents. Type 'done' when completed.",
+        "expected_results": ["done"]
+      }
+    },
+    {
+      "title": "Listing Files and Directories",
+      "content": "The ls command has useful options:\n\n- ls -l: Long format (detailed info)\n- ls -a: Show hidden files\n- ls -h: Human-readable sizes\n- ls -R: Recursive listing\n\nCombine options: ls -lah (long format, all files, human-readable)",
+      "exercise": 2,
+      "practical_task": {
+        "id": 1,
+        "description": "List all files (including hidden) in long format with human-readable sizes. What command did you use?",
+        "expected_results": ["ls -lah", "ls -hal", "ls -la -h", "ls -l -a -h"]
+      }
+    },
+    {
+      "title": "Working with Paths",
+      "content": "Understanding paths is crucial:\n\n- Absolute paths start with /\n- Relative paths are from current location\n- ~ represents home directory\n- . represents current directory\n- .. represents parent directory\n\nExample: cd ../Documents moves up one level then into Documents",
+      "exercise": 3
+    }
+  ],
+  "exercises": [
+    {
+      "question": "What symbol represents the home directory?",
+      "answer": "~",
+      "explanation": "The tilde (~) is a shortcut for your home directory."
+    },
+    {
+      "question": "What command shows your current location?",
+      "answer": "pwd",
+      "explanation": "pwd (Print Working Directory) shows the full path of your current location."
+    },
+    {
+      "question": "What ls option shows hidden files?",
+      "answer": "-a",
+      "explanation": "ls -a shows all files, including hidden ones that start with a dot."
+    },
+    {
+      "question": "What symbol represents the parent directory?",
+      "answer": "..",
+      "explanation": "Two dots (..) refers to the directory one level up from your current location."
+    }
+  ]
+}

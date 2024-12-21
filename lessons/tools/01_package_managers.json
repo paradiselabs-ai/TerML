@@ -1,0 +1,68 @@
+{
+  "title": "Package Manager Essentials",
+  "description": "Learn to use common package managers for different programming ecosystems",
+  "prerequisites": [
+    {
+      "category": "shell",
+      "lesson": "01_navigation"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Package Management Overview",
+      "content": "Package managers are essential tools that help you:\n\n- Install software and libraries\n- Manage dependencies\n- Update packages\n- Remove packages\n- Track versions\n\nCommon package managers:\n- npm (Node.js)\n- pip (Python)\n- gem (Ruby)\n- apt/apt-get (Ubuntu/Debian)\n- brew (macOS)",
+      "exercise": 0
+    },
+    {
+      "title": "NPM Fundamentals",
+      "content": "Node Package Manager (npm) commands:\n\n- npm init: Create new project\n- npm install: Install all dependencies\n- npm install package: Install specific package\n- npm uninstall package: Remove package\n- npm update: Update packages\n- npm list: List installed packages\n\nKey concepts:\n- package.json: Project manifest\n- node_modules: Dependencies directory\n- package-lock.json: Lock file\n\nCommon flags:\n- --save (-S): Save as dependency\n- --save-dev (-D): Save as dev dependency\n- -g: Install globally",
+      "exercise": 1,
+      "practical_task": {
+        "id": 0,
+        "description": "Create a new npm project and install the 'express' package as a dependency. Type the commands you used.",
+        "expected_results": [
+          "npm init -y && npm install express",
+          "npm init -y && npm install express --save",
+          "npm init -y && npm i express"
+        ]
+      }
+    },
+    {
+      "title": "Python Package Management",
+      "content": "Managing Python packages with pip:\n\n- pip install package: Install package\n- pip uninstall package: Remove package\n- pip list: Show installed packages\n- pip freeze: Generate requirements.txt\n- pip install -r requirements.txt: Install from file\n\nBest practices:\n- Use virtual environments (venv)\n- Specify versions in requirements.txt\n- Use pip-tools for dependency management\n- Keep requirements updated\n\nVirtual environments:\n- python -m venv env: Create environment\n- source env/bin/activate: Activate (Unix)\n- env\\Scripts\\activate: Activate (Windows)",
+      "exercise": 2,
+      "practical_task": {
+        "id": 1,
+        "description": "Create a virtual environment, activate it, and install the 'requests' package. Type 'done' when complete.",
+        "expected_results": ["done"]
+      }
+    },
+    {
+      "title": "System Package Management",
+      "content": "System-level package managers:\n\nUbuntu/Debian (apt):\n- apt update: Update package list\n- apt install package: Install package\n- apt remove package: Remove package\n- apt upgrade: Upgrade all packages\n- apt search term: Search packages\n\nmacOS (brew):\n- brew install package: Install package\n- brew uninstall package: Remove package\n- brew update: Update brew\n- brew upgrade: Upgrade packages\n- brew search term: Search packages\n\nBest practices:\n- Keep system updated\n- Clean unused packages\n- Use official repositories\n- Back up before major upgrades",
+      "exercise": 3
+    }
+  ],
+  "exercises": [
+    {
+      "question": "What command initializes a new npm project?",
+      "answer": "npm init",
+      "explanation": "npm init creates a new package.json file for your Node.js project."
+    },
+    {
+      "question": "What command creates a Python virtual environment?",
+      "answer": "python -m venv",
+      "explanation": "python -m venv env creates a new virtual environment named 'env'."
+    },
+    {
+      "question": "What command updates the package list in Ubuntu/Debian?",
+      "answer": "apt update",
+      "explanation": "apt update refreshes the package list to get the latest available versions."
+    },
+    {
+      "question": "What command installs a package with Homebrew?",
+      "answer": "brew install",
+      "explanation": "brew install package_name installs packages on macOS using Homebrew."
+    }
+  ]
+}

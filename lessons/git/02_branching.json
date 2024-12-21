@@ -1,0 +1,67 @@
+{
+  "title": "Git Branching",
+  "description": "Learn how to work with branches in Git for parallel development",
+  "prerequisites": [
+    {
+      "category": "git",
+      "lesson": "01_basics"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Understanding Branches",
+      "content": "Branches allow parallel development streams in your repository:\n\n- main/master: Primary branch, stable code\n- feature branches: New features\n- bugfix branches: Fix issues\n- release branches: Prepare releases\n\nKey concepts:\n- Branch is a pointer to a commit\n- HEAD points to current branch\n- Branches diverge from a common ancestor",
+      "exercise": 0
+    },
+    {
+      "title": "Creating Branches",
+      "content": "Create branches to work on features or fixes:\n\n- List branches: git branch\n- Create branch: git branch <name>\n- Create and switch: git checkout -b <name>\n- Switch branch: git checkout <name>\n\nBest practices:\n- Use descriptive names\n- Branch from latest main\n- One feature per branch\n- Delete old branches",
+      "exercise": 1,
+      "practical_task": {
+        "id": 0,
+        "description": "Create a new branch called 'feature-1' and switch to it. Type the command you used.",
+        "expected_results": [
+          "git checkout -b feature-1",
+          "git branch feature-1 && git checkout feature-1"
+        ]
+      }
+    },
+    {
+      "title": "Working on Branches",
+      "content": "Each branch can evolve independently:\n\n1. Create/modify files\n2. Stage changes: git add\n3. Commit changes: git commit\n4. Push branch: git push -u origin <branch>\n\nTracking changes:\n- git status: Check branch status\n- git log: View branch history\n- git diff: Compare changes",
+      "exercise": 2,
+      "practical_task": {
+        "id": 1,
+        "description": "Create a file, add some content, and commit it to your feature branch. Type 'done' when complete.",
+        "expected_results": ["done"]
+      }
+    },
+    {
+      "title": "Branch Management",
+      "content": "Keep your branches organized:\n\n- List all branches: git branch -a\n- Delete branch: git branch -d <name>\n- Force delete: git branch -D <name>\n- Rename branch: git branch -m <name>\n\nRemote branches:\n- Push branch: git push -u origin <name>\n- Delete remote: git push origin --delete <name>\n- Track remote: git checkout --track origin/<name>",
+      "exercise": 3
+    }
+  ],
+  "exercises": [
+    {
+      "question": "What is the main purpose of branches?",
+      "answer": "parallel development",
+      "explanation": "Branches allow multiple developers to work on different features simultaneously without interfering with each other."
+    },
+    {
+      "question": "What command creates and switches to a new branch?",
+      "answer": "git checkout -b",
+      "explanation": "git checkout -b <branch-name> creates a new branch and switches to it in one command."
+    },
+    {
+      "question": "What command lists all branches?",
+      "answer": "git branch",
+      "explanation": "git branch shows all local branches, use -a to see remote branches too."
+    },
+    {
+      "question": "What command deletes a branch?",
+      "answer": "git branch -d",
+      "explanation": "git branch -d <branch-name> deletes a branch that has been fully merged."
+    }
+  ]
+}
