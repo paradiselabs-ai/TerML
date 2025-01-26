@@ -14,9 +14,18 @@ TERML_PREFIX = "terml"
 
 # API Keys
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
+
+# Validate API keys
 if not ANTHROPIC_API_KEY:
     print("Warning: ANTHROPIC_API_KEY environment variable is not set. Using a dummy key for testing.")
     ANTHROPIC_API_KEY = "dummy_api_key_for_testing"
+
+# Provider Configuration
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "anthropic")  # Default to anthropic
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "openai/gpt-3.5-turbo")
+HUGGINGFACE_MODEL = os.getenv("HUGGINGFACE_MODEL", "gpt2")
 
 # Logging Configuration
 LOG_LEVEL = "INFO"
@@ -43,5 +52,5 @@ CODE_IMPROVEMENT_PROMPT = BASE_PROMPT + " Analyze the given code analysis summar
 TEST_IMPROVEMENT_PROMPT = BASE_PROMPT + " Analyze the given test files and suggest improvements for better test coverage and quality. Focus on test completeness, edge cases, and best practices in unit testing."
 
 # Error Messages
-API_KEY_ERROR = "Error: Anthropic API key not found. Please set the ANTHROPIC_API_KEY environment variable."
+API_KEY_ERROR = "Error: API key not found. Please set the appropriate API key environment variable."
 COMMAND_ERROR = "Error: Unknown TerML command. Use 'terml --help' for available commands."
