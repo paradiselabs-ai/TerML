@@ -1,9 +1,13 @@
 import sys
+import os
 import click
 from .terminal_handler import TerminalHandler
 from .ai_integration import AIIntegration
 from .commands import CommandExecutor
 from .git_helper import analyze_git_state, provide_git_guidance, get_quick_git_help
+from .llm_providers import available_providers
+from .config import update_config
+from .lesson_system import LessonManager, LessonCategory
 
 @click.group(invoke_without_command=True)
 @click.pass_context
@@ -12,7 +16,7 @@ def cli(ctx):
     if ctx.invoked_subcommand is None:
         click.echo("TerML: AI-powered Terminal Assistant")
         click.echo("Use 'terml [command]' to interact with TerML.")
-        click.echo("Available commands: explain, suggest, debug, chat, auto, summarize, generate, analyze, test, deps, git")
+        click.echo("Available commands: explain, suggest, debug, chat, auto, summarize, generate, analyze, test, deps, git, provider")
         click.echo("For more information, use 'terml [command] --help'")
 
 @cli.command()
@@ -125,26 +129,67 @@ def status():
         click.echo(provide_git_guidance(state, details))
 
 @git.group()
-def learn():
+@click.option('--teach', '-t', is_flag=True, help="Start an interactive git learning session")
+@click.option('--quick', '-q', is_flag=True, help="Show quick help for common git commands")
+@click.option('--quick-teach', '-qt', is_flag=True, help="Start a quick Q&A session for git")
+def learn(teach, quick, quick_teach):
     """Learn git concepts and commands"""
-    pass
-
-@learn.command()
-@click.option('-t', '--teach', is_flag=True, help="Start an interactive git learning session")
-@click.option('-q', '--quick', is_flag=True, help="Show quick help for common git commands")
-@click.option('-qt', '--quick-teach', is_flag=True, help="Start a quick Q&A session for git")
-def interactive(teach, quick, quick_teach):
-    """Start an interactive git learning session"""
+    lesson_manager = LessonManager()
+    
     if teach:
-        click.echo("Starting an interactive git learning session...")
-        # TODO: Implement interactive git learning session
+        # Show available Git lessons
+        available_lessons = lesson_manager.get_available_lessons('git')
+        if not available_lessons:
+            click.echo("No Git lessons available.")
+            return
+        
+        click.echo("\nAvailable Git Lessons:")
+        for lesson in available_lessons['git']:
+            status = "✅" if lesson['completed'] else "⭕"
+            click.echo(f"{status} {lesson['id']}: {lesson['title']}")
+        
+        lesson_id = click.prompt("\nEnter the lesson ID you want to start", type=str)
+        lesson_manager.start_interactive_session('git', lesson_id)
+    
     elif quick:
         click.echo(get_quick_git_help())
+    
     elif quick_teach:
         click.echo("Starting a quick Q&A session for git...")
         # TODO: Implement quick Q&A session for git
+    
     else:
         click.echo("Please specify -t for interactive lessons, -q for quick help, or -qt for a quick Q&A session.")
+
+@cli.group()
+def provider():
+    """Manage LLM providers"""
+    pass
+
+@provider.command()
+@click.argument('provider_name')
+@click.option('--model', help='Specify the model for the provider')
+def set(provider_name, model):
+    """Set the active LLM provider"""
+    providers = available_providers()
+    if provider_name not in providers:
+        click.echo(f"Error: Provider '{provider_name}' is not available.")
+        click.echo(f"Available providers: {', '.join(providers)}")
+        return
+    
+    try:
+        # Update configuration
+        update_config('llm_provider', provider_name)
+        
+        # If model is specified, update model configuration
+        if model:
+            update_config(f'{provider_name}_model', model)
+        
+        click.echo(f"Successfully set {provider_name} as the active LLM provider")
+        if model:
+            click.echo(f"Model set to {model}")
+    except Exception as e:
+        click.echo(f"Error setting provider: {e}")
 
 def validate_options(ctx, param, value):
     if value and ctx.command.name not in ['chat', 'auto', 'git']:

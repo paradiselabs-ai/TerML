@@ -1,5 +1,5 @@
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv, set_key
 
 # Load environment variables from .env file if it exists
 load_dotenv()
@@ -54,3 +54,27 @@ TEST_IMPROVEMENT_PROMPT = BASE_PROMPT + " Analyze the given test files and sugge
 # Error Messages
 API_KEY_ERROR = "Error: API key not found. Please set the appropriate API key environment variable."
 COMMAND_ERROR = "Error: Unknown TerML command. Use 'terml --help' for available commands."
+
+def update_config(key: str, value: str):
+    """
+    Update a configuration value in the .env file.
+    
+    Args:
+        key (str): The configuration key to update
+        value (str): The new value for the configuration key
+    """
+    # Ensure the .env file exists
+    env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+    
+    # Normalize the key to uppercase for environment variables
+    key = key.upper()
+    
+    try:
+        # Use python-dotenv's set_key to update or add the key-value pair
+        set_key(env_path, key, value)
+        
+        # Reload environment variables to reflect the change
+        load_dotenv(override=True)
+    except Exception as e:
+        print(f"Error updating configuration: {e}")
+        raise

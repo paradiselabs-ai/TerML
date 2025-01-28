@@ -1,6 +1,7 @@
 """LLM Provider Interface and Implementations"""
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any
+import os
 
 class LLMProvider(ABC):
     """Base class for LLM providers"""
@@ -24,3 +25,18 @@ class LLMProvider(ABC):
     def supports_streaming(self) -> bool:
         """Check if the provider supports streaming responses"""
         return False
+
+def available_providers() -> List[str]:
+    """
+    Dynamically discover available LLM providers based on existing provider files.
+    
+    Returns:
+        List of provider names (without .py extension)
+    """
+    current_dir = os.path.dirname(__file__)
+    providers = [
+        f.replace('.py', '') 
+        for f in os.listdir(current_dir) 
+        if f.endswith('.py') and f != '__init__.py'
+    ]
+    return providers
