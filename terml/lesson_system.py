@@ -85,14 +85,23 @@ class Lesson:
         self.current_step += 1
         return step
 
-    def validate_answer(self, step_idx: int, answer: str) -> tuple[bool, str]:
+    def validate_answer(self, step_idx: int, answer: str) -> tuple[bool, str, Optional[List[str]]]:
         if 'exercise' not in self.steps[step_idx]:
-            return False, "No exercise in this step"
+            return False, "No exercise in this step", None
         
         exercise = self.exercises[self.steps[step_idx]['exercise']]
-        is_correct = answer.strip().lower() == exercise['answer'].strip().lower()
+        
+        # If the exercise has multiple choice options, return them
+        if 'choices' in exercise:
+            return False, exercise.get('question', ''), exercise.get('choices', [])
+        
+        # For text-based answers
+        is_correct = any(
+            answer.strip().lower() == expected.strip().lower() 
+            for expected in [exercise['answer']]
+        )
         feedback = exercise.get('explanation', '')
-        return is_correct, feedback
+        return is_correct, feedback, None
 
 class LessonManager:
     """Manages lesson loading, tracking, and interaction"""
@@ -101,7 +110,7 @@ class LessonManager:
         self.progress = LessonProgress(self.lessons_dir / "progress.json")
         self.current_lesson = None
 
-    def get_available_lessons(self, category: str = None) -> Dict[str, List[str]]:
+    def get_available_lessons(self, category: str = None) -> Dict[str, List[Dict]]:
         """Get all available lessons, optionally filtered by category"""
         result = {}
         categories = [category] if category else LessonCategory.CATEGORIES.keys()
@@ -112,7 +121,7 @@ class LessonManager:
                 continue
             
             lessons = []
-            for lesson_file in cat_dir.glob('*.json'):
+            for lesson_file in sorted(cat_dir.glob('*.json')):
                 try:
                     content = json.loads(lesson_file.read_text())
                     lessons.append({
@@ -125,22 +134,43 @@ class LessonManager:
                     continue
             
             if lessons:
-                result[cat] = sorted(lessons, key=lambda x: x['id'])
+                result[cat] = lessons
         
         return result
+
+    def find_lesson_by_id(self, category: str, lesson_id: str) -> Optional[str]:
+        """Find a lesson by full or partial ID"""
+        available_lessons = self.get_available_lessons(category)
+        
+        # Exact match
+        for lesson in available_lessons.get(category, []):
+            if lesson['id'] == lesson_id:
+                return lesson['id']
+        
+        # Partial match
+        for lesson in available_lessons.get(category, []):
+            if lesson['id'].startswith(lesson_id):
+                return lesson['id']
+        
+        return None
 
     def load_lesson(self, category: str, lesson_id: str) -> Optional[Lesson]:
         """Load a specific lesson"""
         if not LessonCategory.is_valid_category(category):
             return None
 
-        lesson_file = self.lessons_dir / category / f"{lesson_id}.json"
+        # Find the full lesson ID
+        full_lesson_id = self.find_lesson_by_id(category, lesson_id)
+        if not full_lesson_id:
+            return None
+
+        lesson_file = self.lessons_dir / category / f"{full_lesson_id}.json"
         if not lesson_file.exists():
             return None
 
         try:
             content = json.loads(lesson_file.read_text())
-            self.current_lesson = Lesson(category, lesson_id, content)
+            self.current_lesson = Lesson(category, full_lesson_id, content)
             return self.current_lesson
         except (json.JSONDecodeError, KeyError):
             return None
@@ -175,15 +205,46 @@ class LessonManager:
 
                 if 'exercise' in step:
                     while True:
-                        answer = click.prompt("\nYour answer (or 'skip' to continue)")
-                        if answer.lower() == 'skip':
-                            break
+                        is_correct, message, choices = lesson.validate_answer(lesson.current_step - 1, '')
                         
-                        is_correct, feedback = lesson.validate_answer(lesson.current_step - 1, answer)
-                        if is_correct:
-                            click.echo(f"✅ Correct! {feedback}")
-                            break
-                        click.echo(f"❌ Not quite. {feedback}")
+                        # Multiple choice exercise
+                        if choices:
+                            click.echo(f"\n{message}")
+                            for i, choice in enumerate(choices, 1):
+                                click.echo(f"{i}. {choice}")
+                            
+                            answer = click.prompt("\nEnter the number of your answer (or 'skip' to continue)", type=str)
+                            
+                            if answer.lower() == 'skip':
+                                break
+                            
+                            try:
+                                choice_index = int(answer) - 1
+                                if 0 <= choice_index < len(choices):
+                                    selected_answer = choices[choice_index]
+                                    is_correct, feedback, _ = lesson.validate_answer(lesson.current_step - 1, selected_answer)
+                                    
+                                    if is_correct:
+                                        click.echo(f"✅ Correct! {feedback}")
+                                        break
+                                    else:
+                                        click.echo(f"❌ Not quite. {feedback}")
+                                else:
+                                    click.echo("Invalid choice. Please select a number between 1 and 4.")
+                            except ValueError:
+                                click.echo("Please enter a valid number.")
+                        
+                        # Text-based exercise
+                        else:
+                            answer = click.prompt("\nYour answer (or 'skip' to continue)")
+                            if answer.lower() == 'skip':
+                                break
+                            
+                            is_correct, feedback, _ = lesson.validate_answer(lesson.current_step - 1, answer)
+                            if is_correct:
+                                click.echo(f"✅ Correct! {feedback}")
+                                break
+                            click.echo(f"❌ Not quite. {feedback}")
 
                 if not click.confirm("\nContinue to next step?"):
                     click.echo("\nLesson progress saved. You can continue later.")

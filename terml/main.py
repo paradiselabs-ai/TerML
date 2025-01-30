@@ -129,11 +129,16 @@ def status():
         click.echo(provide_git_guidance(state, details))
 
 @git.group()
+def learn():
+    """Learn git concepts and commands"""
+    pass
+
+@learn.command(name="interactive")
 @click.option('--teach', '-t', is_flag=True, help="Start an interactive git learning session")
 @click.option('--quick', '-q', is_flag=True, help="Show quick help for common git commands")
 @click.option('--quick-teach', '-qt', is_flag=True, help="Start a quick Q&A session for git")
-def learn(teach, quick, quick_teach):
-    """Learn git concepts and commands"""
+def interactive_learn(teach, quick, quick_teach):
+    """Start an interactive git learning session"""
     lesson_manager = LessonManager()
     
     if teach:
@@ -160,6 +165,21 @@ def learn(teach, quick, quick_teach):
     
     else:
         click.echo("Please specify -t for interactive lessons, -q for quick help, or -qt for a quick Q&A session.")
+
+@learn.command(name="list")
+def list_lessons():
+    """List available Git lessons"""
+    lesson_manager = LessonManager()
+    available_lessons = lesson_manager.get_available_lessons('git')
+    
+    if not available_lessons:
+        click.echo("No Git lessons available.")
+        return
+    
+    click.echo("\nAvailable Git Lessons:")
+    for lesson in available_lessons['git']:
+        status = "✅" if lesson['completed'] else "⭕"
+        click.echo(f"{status} {lesson['id']}: {lesson['title']}")
 
 @cli.group()
 def provider():

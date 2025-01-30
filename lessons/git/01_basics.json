@@ -37,21 +37,45 @@
   "exercises": [
     {
       "question": "What is the main purpose of version control?",
-      "answer": "track changes",
+      "choices": [
+        "Track changes",
+        "Create backups",
+        "Share code",
+        "Write documentation"
+      ],
+      "answer": "Track changes",
       "explanation": "Version control systems track changes to files over time, allowing you to review and revert to previous versions if needed."
     },
     {
       "question": "What command initializes a new Git repository?",
+      "choices": [
+        "git start",
+        "git create",
+        "git init",
+        "git new"
+      ],
       "answer": "git init",
       "explanation": "git init creates a new Git repository by creating a .git directory to store version control information."
     },
     {
       "question": "What command shows the current state of your repository?",
+      "choices": [
+        "git check",
+        "git state",
+        "git info",
+        "git status"
+      ],
       "answer": "git status",
       "explanation": "git status shows which files are modified, staged, or untracked."
     },
     {
       "question": "What command saves staged changes to the repository?",
+      "choices": [
+        "git save",
+        "git push",
+        "git commit",
+        "git record"
+      ],
       "answer": "git commit",
       "explanation": "git commit creates a new commit with your staged changes and a descriptive message."
     }
