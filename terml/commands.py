@@ -6,12 +6,14 @@ from .code_analyzer import analyze_project, get_analysis_summary
 from .test_generator import generate_and_write_tests
 from .dependency_manager import get_dependency_info, update_dependencies, add_dependency, remove_dependency
 from .git_helper import analyze_git_state, provide_git_guidance, get_quick_git_help, GitLearningSession
+from .llm_providers.model_search import ModelSearcher
 
 class CommandExecutor:
     def __init__(self, terminal_handler, ai_integration):
         self.terminal_handler = terminal_handler
         self.ai_integration = ai_integration
         self.git_session = GitLearningSession()
+        self.model_searcher = ModelSearcher()
 
     def execute(self, command, retain_memory=False):
         parts = command.split()
@@ -33,7 +35,8 @@ class CommandExecutor:
             "test": self._generate_tests,
             "deps": self._manage_dependencies,
             "git": self._handle_git_command,
-            "learn": self._handle_learn_command
+            "learn": self._handle_learn_command,
+            "models": self._handle_models_command
         }
 
         if subcommand in command_map:
@@ -41,6 +44,44 @@ class CommandExecutor:
         else:
             click.echo(f"Unknown TerML command. Use 'terml --help' for available commands.")
 
+    def _handle_models_command(self, args, retain_memory=False):
+        """
+        Handle model-related commands for searching, listing, and selecting models
+        
+        Subcommands:
+        - search: Interactive model search
+        - list: List available models
+        - info: Get detailed information about a specific model
+        """
+        if not args:
+            # Interactive model search by default
+            selected_model = self.model_searcher.interactive_model_search()
+            if selected_model:
+                click.echo(f"Selected model for use: {selected_model}")
+                # TODO: Update AI integration with selected model
+            return
+        
+        subcommand = args[0].lower()
+        
+        if subcommand == 'search':
+            # Interactive search with optional keyword
+            keyword = args[1] if len(args) > 1 else None
+            self.model_searcher.interactive_model_search(keyword)
+        
+        elif subcommand == 'list':
+            # List models with optional task filter
+            task_filter = args[1] if len(args) > 1 else None
+            models = self.model_searcher.list_available_models(task_filter)
+            
+            click.echo("Available Models:")
+            for model in models:
+                click.echo(f"  - {model}")
+        
+        else:
+            click.echo(f"Unknown models subcommand: {subcommand}")
+            click.echo("Available subcommands: search, list")
+
+    # Rest of the methods remain the same as in the original file
     def _explain(self, args, retain_memory=False):
         last_output = self.terminal_handler.get_last_output()
         explanation = self.ai_integration.explain_output(last_output)
